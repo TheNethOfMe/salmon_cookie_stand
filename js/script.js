@@ -16,45 +16,7 @@ function generateRandomCookies() {
     cookiesPerHour.push({ [hourMarker]: cookies, });
   }
   return cookiesPerHour;
-}
-
-const pikeLocation = {
-  customerMin: 23,
-  customerMax: 65,
-  avgCookieSale: 6.3,
-  getCookieSalesPerHour: generateRandomCookies,
-  tableId: 'pike-table',
-  addTableToDOM: generateTable,
 };
-
-const seatacLocation = {
-  customerMin: 3,
-  customerMax: 24,
-  avgCookieSale: 1.2,
-  getCookieSalesPerHour: generateRandomCookies,
-};
-
-const seaCenterLocation = {
-  customerMin: 11,
-  customerMax: 38,
-  avgCookieSale: 3.7,
-  getCookieSalesPerHour: generateRandomCookies,
-};
-
-const capHillLocation = {
-  customerMin: 20,
-  customerMax: 38,
-  avgCookieSale: 2.3,
-  getCookieSalesPerHour: generateRandomCookies,
-};
-
-const alkiLocation = {
-  customerMin: 2,
-  customerMax: 16,
-  avgCookieSale: 4.6,
-  getCookieSalesPerHour: generateRandomCookies,
-};
-
 
 function generateTable() {
   const cookiesArr = this.getCookieSalesPerHour();
@@ -71,9 +33,58 @@ function generateTable() {
     newRow.appendChild(data1);
     newRow.appendChild(data2);
   });
-}
+};
+
+const pikeLocation = {
+  customerMin: 23,
+  customerMax: 65,
+  avgCookieSale: 6.3,
+  getCookieSalesPerHour: generateRandomCookies,
+  tableId: 'pike-table',
+  addTableToDOM: generateTable,
+};
+
+const seatacLocation = {
+  customerMin: 3,
+  customerMax: 24,
+  avgCookieSale: 1.2,
+  getCookieSalesPerHour: generateRandomCookies,
+  tableId: 'seatac-table',
+  addTableToDOM: generateTable,
+};
+
+const seaCenterLocation = {
+  customerMin: 11,
+  customerMax: 38,
+  avgCookieSale: 3.7,
+  getCookieSalesPerHour: generateRandomCookies,
+  tableId: 'seacenter-table',
+  addTableToDOM: generateTable,
+};
+
+const capHillLocation = {
+  customerMin: 20,
+  customerMax: 38,
+  avgCookieSale: 2.3,
+  getCookieSalesPerHour: generateRandomCookies,
+  tableId: 'caphill-table',
+  addTableToDOM: generateTable,
+};
+
+const alkiLocation = {
+  customerMin: 2,
+  customerMax: 16,
+  avgCookieSale: 4.6,
+  getCookieSalesPerHour: generateRandomCookies,
+  tableId: 'alki-table',
+  addTableToDOM: generateTable,
+};
 
 pikeLocation.addTableToDOM();
+seatacLocation.addTableToDOM();
+seaCenterLocation.addTableToDOM();
+capHillLocation.addTableToDOM();
+alkiLocation.addTableToDOM();
 // const pikeCookies = pikeLocation.getCookieSalesPerHour();
 // const pikeTable = document.getElementById('pike-table');
 
