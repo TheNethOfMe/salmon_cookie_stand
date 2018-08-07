@@ -1,5 +1,7 @@
 'use strict';
 
+// this is the function that creates an array of random data
+// the array contains objects and each object has a time, cumstomer, and cookie properties
 function generateRandomStats() {
   let cookiesPerHour = [];
   for (let i = 6; i < 21; i++) {
@@ -18,6 +20,11 @@ function generateRandomStats() {
   return cookiesPerHour;
 };
 
+// this is the function that actually creates the table and appends it to the DOM
+// the function calls the stat generator function and uses the data from the resulting array
+// and turns it into an HTML friendly table
+// it also keeps a running total of all customers and cookies to append totals to the end 
+// of the table
 function generateTable() {
   const cookiesArr = this.getStatsPerHour();
   const addToTable = document.getElementById(this.tableId);
@@ -45,6 +52,11 @@ function generateTable() {
   document.getElementById(`${this.tableId}-cookies`).appendChild(document.createTextNode(totalCookies));
 };
 
+// one object for each location
+// each object contains the min and max hourly customers, average cookies sales,
+// the methods for generating stats and generating tables, and a tableId 
+// which is used in the generate table function so the function knows which id to 
+// append the table to
 const pikeLocation = {
   customerMin: 23,
   customerMax: 65,
@@ -90,6 +102,8 @@ const alkiLocation = {
   addTableToDOM: generateTable,
 };
 
+// call the method on each object that creates the table
+// and appends it to the DOM
 pikeLocation.addTableToDOM();
 seatacLocation.addTableToDOM();
 seaCenterLocation.addTableToDOM();
