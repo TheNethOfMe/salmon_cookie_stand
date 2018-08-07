@@ -14,11 +14,11 @@ a {
 a:hover {
   color: #D9B669;
 }
+
 /* HEAD */
 #logo-head {
   background-color: #B75835;
   border-bottom: #959089 solid 5px;
-  font-family: 'Black And White Picture', sans-serif;
   padding: 1.3em;
   text-align: center;
 }
@@ -34,6 +34,10 @@ a:hover {
 
 .head-item:last-child {
   width: 70%;
+}
+
+h1, h2 {
+  font-family: 'Black And White Picture', sans-serif;
 }
 
 h1 {
@@ -86,6 +90,36 @@ th {
   background-color: #959089;
   display: inline-block;
   text-align: center;
+}
+
+/* MAIN PAGE */
+section {
+  background-color: #959089;
+  font-size: 1.2em;
+  margin: 10px auto;
+  padding: 8px;
+  text-align: center;
+  width: 80%;
+}
+
+section div {
+  padding: 3px;
+  border: #555 inset 5px;
+  vertical-align: top;
+}
+
+.big-side {
+  background-color: #eee;
+  display: inline-block;
+  min-height: 100px;
+  width: 55%
+}
+
+.small-side {
+  background-color: #AA6745;
+  display: inline-block;
+  min-height: 100px;
+  width: 30%;
 }
 
 /* FOOTER */
