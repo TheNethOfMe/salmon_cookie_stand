@@ -23,7 +23,7 @@ function generateRandomStats() {
 // this is the function that actually creates the table and appends it to the DOM
 // the function calls the stat generator function and uses the data from the resulting array
 // and turns it into an HTML friendly table
-// it also keeps a running total of all customers and cookies to append totals to the end 
+// it also keeps a running total of all customers and cookies to append totals to the end
 // of the table
 function generateTable() {
   const cookiesArr = this.getStatsPerHour();
@@ -33,14 +33,17 @@ function generateTable() {
   cookiesArr.forEach((item) => {
     totalCustomers += item.customers;
     totalCookies += item.cookies;
+
+    const newRow = document.createElement('tr');
+    addToTable.appendChild(newRow);
+
     const timeData = document.createTextNode(item.time);
     const customerData = document.createTextNode(item.customers);
     const cookieData = document.createTextNode(item.cookies);
     const data1 = document.createElement('td');
     const data2 = document.createElement('td');
     const data3 = document.createElement('td');
-    const newRow = document.createElement('tr');
-    addToTable.appendChild(newRow);
+
     data1.appendChild(timeData);
     data2.appendChild(customerData);
     data3.appendChild(cookieData);
@@ -52,55 +55,26 @@ function generateTable() {
   document.getElementById(`${this.tableId}-cookies`).appendChild(document.createTextNode(totalCookies));
 };
 
+// location object constructor
+function Location(customerMin, customerMax, avgCookieSale, tableId) {
+  this.customerMin = customerMin;
+  this.customerMax = customerMax;
+  this.avgCookieSale = avgCookieSale;
+  this.tableId = tableId;
+}
+
+// the methods for generating stats and generating tables for the Location object
+Location.prototype.getStatsPerHour = generateRandomStats;
+Location.prototype.addTableToDOM = generateTable;
+
 // one object for each location
-// each object contains the min and max hourly customers, average cookies sales,
-// the methods for generating stats and generating tables, and a tableId 
-// which is used in the generate table function so the function knows which id to 
-// append the table to
-const pikeLocation = {
-  customerMin: 23,
-  customerMax: 65,
-  avgCookieSale: 6.3,
-  getStatsPerHour: generateRandomStats,
-  tableId: 'pike-table',
-  addTableToDOM: generateTable,
-};
-
-const seatacLocation = {
-  customerMin: 3,
-  customerMax: 24,
-  avgCookieSale: 1.2,
-  getStatsPerHour: generateRandomStats,
-  tableId: 'seatac-table',
-  addTableToDOM: generateTable,
-};
-
-const seaCenterLocation = {
-  customerMin: 11,
-  customerMax: 38,
-  avgCookieSale: 3.7,
-  getStatsPerHour: generateRandomStats,
-  tableId: 'seacenter-table',
-  addTableToDOM: generateTable,
-};
-
-const capHillLocation = {
-  customerMin: 20,
-  customerMax: 38,
-  avgCookieSale: 2.3,
-  getStatsPerHour: generateRandomStats,
-  tableId: 'caphill-table',
-  addTableToDOM: generateTable,
-};
-
-const alkiLocation = {
-  customerMin: 2,
-  customerMax: 16,
-  avgCookieSale: 4.6,
-  getStatsPerHour: generateRandomStats,
-  tableId: 'alki-table',
-  addTableToDOM: generateTable,
-};
+// each object contains the min and max hourly customers, average cookies sales, and a tableId
+// which is used in the generate table function so the function knows which id to append the table to
+const pikeLocation = new Location(23, 65, 6.3, 'pike-table');
+const seatacLocation = new Location(3, 24, 1.2, 'seatac-table');
+const seaCenterLocation = new Location(11, 38, 3.7, 'seacenter-table');
+const capHillLocation = new Location(20, 38, 2.3, 'caphill-table');
+const alkiLocation = new Location(2, 16, 4.6, 'alki-table');
 
 // call the method on each object that creates the table
 // and appends it to the DOM
