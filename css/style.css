@@ -2,8 +2,15 @@
 /* Dark Blue #16181C */
 /* Light Blue #959089 */
 /* Gold-ish #D9B669 */
+html {
+  height: 100%;
+  margin: 0;
+}
+
 body {
   background-color: #16181C;
+  height: 100%;
+  margin: 0;
 }
 
 a {
@@ -13,6 +20,11 @@ a {
 
 a:hover {
   color: #D9B669;
+}
+
+.wrapper {
+  min-height: 100%;
+  margin-bottom: -50px;
 }
 
 /* HEAD */
@@ -130,9 +142,10 @@ section div {
 }
 
 /* FOOTER */
+
 footer {
   background-color: #B75835;
   border-top: #959089 solid 5px;
   margin-top: 15px;
-  min-height: 50px;
+  height: 50px;
 }

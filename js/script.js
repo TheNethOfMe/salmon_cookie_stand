@@ -20,7 +20,7 @@ function generateHourMarkers() {
   return hourMarkers;
 }
 
-// funciton to produce an array of everything that will go into the footer row
+// function to produce an array of everything that will go into the footer row
 function generateTotalsArray() {
   const allRows = document.getElementsByTagName('tr');
   const totalsArray = ['Hour Totals'];
