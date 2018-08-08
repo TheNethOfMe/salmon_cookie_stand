@@ -100,13 +100,6 @@ function Location(customerMin, customerMax, avgCookieSale, locationName) {
 Location.prototype.getStatsPerHour = generateRow;
 Location.prototype.render = displayRow;
 
-// create our locations with constructors
-// const pikeLocation = new Location(23, 65, 6.3, '1st & Pike');
-// const seatacLocation = new Location(3, 24, 1.2, 'Seatac');
-// const seaCenterLocation = new Location(11, 38, 3.7, 'Seattle Center');
-// const capHillLocation = new Location(20, 38, 2.3, 'Capitol Hill');
-// const alkiLocation = new Location(2, 16, 4.6, 'Alki');
-
 new Location(23, 65, 6.3, '1st & Pike');
 new Location(3, 24, 1.2, 'Seatac');
 new Location(11, 38, 3.7, 'Seattle Center');

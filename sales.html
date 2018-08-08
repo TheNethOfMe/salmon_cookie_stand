@@ -41,26 +41,28 @@
       <ul id="error-list">
         <!-- JS will append errors when needed -->
       </ul>
-      <div class="field-group">
-        <label for="locationName">New Location Name:</label>
-        <input id="locationName" name="locationName" type="text" />
-      </div>
-      <div class="field-group">
-        <label for="minCustomers">Projected Minimum Customers Per Hour</label>
-        <input id="minCustomers" name="minCustomers" type="number" />
-      </div>
-      <div class="field-group">  
-        <label for="maxCustomers">Projected Maximum Customers Per Hour</label>
-        <input id="maxCustomers" name="maxCustomers" type="number" />
-      </div>
-      <div class="field-group">
-        <label for="avgCookies">Projected Average Cookies Per Transaction</label>
-        <input id="avgCookies" name="avgCookies" type="number" step="0.1" />    
-      </div>
-      <div class="field-group">
-        <button type="submit">Add Location</button>
-        <button type="reset" id="clear-button">Clear</button>
-      </div>
+      <fieldset>
+        <div class="field-group">
+          <label for="locationName">New Location Name:</label>
+          <input id="locationName" name="locationName" type="text" />
+        </div>
+        <div class="field-group">
+          <label for="minCustomers">Projected Minimum Customers Per Hour</label>
+          <input id="minCustomers" name="minCustomers" type="number" />
+        </div>
+        <div class="field-group">  
+          <label for="maxCustomers">Projected Maximum Customers Per Hour</label>
+          <input id="maxCustomers" name="maxCustomers" type="number" />
+        </div>
+        <div class="field-group">
+          <label for="avgCookies">Projected Average Cookies Per Transaction</label>
+          <input id="avgCookies" name="avgCookies" type="number" step="0.1" />    
+        </div>
+        <div class="field-group">
+          <button type="submit">Add Location</button>
+          <button type="reset" id="clear-button">Clear</button>
+        </div>
+      </fieldset>
     </form>
   </div>
   

@@ -151,7 +151,14 @@ form {
 }
 
 #error-list li {
-  color: red;
+  background-color: darkred;
+  color: #eee;
+  padding: 3px;
+}
+
+.field-group {
+  margin: 5px auto;
+  width: 90%;
 }
 
 /* FOOTER */
