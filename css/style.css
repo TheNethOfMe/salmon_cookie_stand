@@ -141,8 +141,27 @@ section div {
   width: 30%;
 }
 
-/* FOOTER */
+/* FORM */
+form {
+  background-color: #959089;
+  border: #B75835 solid 3px;
+  margin: 9px auto;
+  padding: 8px;
+  width: 80%;
+}
 
+#error-list li {
+  background-color: darkred;
+  color: #eee;
+  padding: 3px;
+}
+
+.field-group {
+  margin: 5px auto;
+  width: 90%;
+}
+
+/* FOOTER */
 footer {
   background-color: #B75835;
   border-top: #959089 solid 5px;
