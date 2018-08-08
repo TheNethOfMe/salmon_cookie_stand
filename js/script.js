@@ -84,12 +84,16 @@ function displayRow(sales, tossers) {
   });
 };
 
-// location object constructor
+// an array for containing all Location objects
+let storeLocationArray = [];
+
+// location object constructor which also pushes the object into the storeLocationArray
 function Location(customerMin, customerMax, avgCookieSale, locationName) {
   this.customerMin = customerMin;
   this.customerMax = customerMax;
   this.avgCookieSale = avgCookieSale;
   this.locationName = locationName;
+  storeLocationArray.push(this);
 }
 
 // the methods for generating stats and generating tables for the Location object added to constructor with prototype
@@ -97,11 +101,17 @@ Location.prototype.getStatsPerHour = generateRow;
 Location.prototype.render = displayRow;
 
 // create our locations with constructors
-const pikeLocation = new Location(23, 65, 6.3, '1st & Pike');
-const seatacLocation = new Location(3, 24, 1.2, 'Seatac');
-const seaCenterLocation = new Location(11, 38, 3.7, 'Seattle Center');
-const capHillLocation = new Location(20, 38, 2.3, 'Capitol Hill');
-const alkiLocation = new Location(2, 16, 4.6, 'Alki');
+// const pikeLocation = new Location(23, 65, 6.3, '1st & Pike');
+// const seatacLocation = new Location(3, 24, 1.2, 'Seatac');
+// const seaCenterLocation = new Location(11, 38, 3.7, 'Seattle Center');
+// const capHillLocation = new Location(20, 38, 2.3, 'Capitol Hill');
+// const alkiLocation = new Location(2, 16, 4.6, 'Alki');
+
+new Location(23, 65, 6.3, '1st & Pike');
+new Location(3, 24, 1.2, 'Seatac');
+new Location(11, 38, 3.7, 'Seattle Center');
+new Location(20, 38, 2.3, 'Capitol Hill');
+new Location(2, 16, 4.6, 'Alki');
 
 // where all the magic happens
 function generateAllTables() {
@@ -133,11 +143,9 @@ function generateAllTables() {
   createTableHeaderFooter('thead', tosserHours, tosserTable, tosserBody);
 
   // call the method on each object that creates the table and append it to the DOM
-  pikeLocation.render(salesTable, tosserTable);
-  seatacLocation.render(salesTable, tosserTable);
-  seaCenterLocation.render(salesTable, tosserTable);
-  capHillLocation.render(salesTable, tosserTable);
-  alkiLocation.render(salesTable, tosserTable);
+  storeLocationArray.forEach((franchise) => {
+    franchise.render(salesTable, tosserTable);
+  });
 
   // save the footer row values array to variables for both tables
   const footerTotals = generateTotalsArray(salesTable);
@@ -148,4 +156,61 @@ function generateAllTables() {
   createTableHeaderFooter('tfoot', tosserTotals, tosserTable, tosserBody);
 }
 
+// run the function to create the tables when page starts
 generateAllTables();
+
+// functions and variables related to the new location form follow
+const newLocationForm = document.getElementById('new-location-form');
+const errorList = document.getElementById('error-list');
+
+// clears all errors before displaying new errors or upon successful submit
+function clearErrors() {
+  while (errorList.firstChild) {
+    errorList.removeChild(errorList.firstChild);
+  }
+}
+
+// handle errors from the user submitted form
+function errorHandling(data) {
+  let errors = [];
+  if (typeof data.newLocationName !== 'string' || !data.newLocationName.length) {
+    errors.push('Your location needs a name.');
+  }
+  if (isNaN(data.newMaxCustomers) || isNaN(data.newMinCustomers) || isNaN(data.newAvgCookies)) {
+    errors.push('Your minimum customers, maximum customers, and average sales must be numbers.');
+  }
+  if (data.newMaxCustomers < data.newMinCustomers) {
+    errors.push('Maximum customers can\'t be fewer than your minimum customers.');
+  }
+  return errors;
+}
+
+// when the form is submitted
+function addNewLocation(e) {
+  e.preventDefault();
+  let formResults = {};
+  formResults.newLocationName = e.target.locationName.value;
+  formResults.newMinCustomers = parseFloat(e.target.minCustomers.value);
+  formResults.newMaxCustomers = parseFloat(e.target.maxCustomers.value);
+  formResults.newAvgCookies = parseFloat(e.target.avgCookies.value);
+  const errorsArray = errorHandling(formResults);
+  if (errorsArray.length) {
+    clearErrors();
+    errorsArray.forEach((err) => {
+      const errMsg = document.createTextNode(err);
+      const errListItem = document.createElement('li');
+      errListItem.appendChild(errMsg);
+      errorList.appendChild(errListItem);
+    });
+  } else {
+    clearErrors();
+    new Location(formResults.newMinCustomers, formResults.newMaxCustomers, formResults.newAvgCookies, formResults.newLocationName);
+    generateAllTables();
+    e.target.locationName.value = '';
+    e.target.minCustomers.value = '';
+    e.target.maxCustomers.value = '';
+    e.target.avgCookies.value = '';
+  }
+}
+
+newLocationForm.addEventListener('submit', addNewLocation);
