@@ -23,7 +23,7 @@ function generateTotalsArray(table) {
   const totalsArray = ['Hour Totals'];
   for (let i = 1; i < allCookieCols.length; i++) {
     let total = 0;
-    for (let j = 1 ; j < allCookieRows.length; j++) {
+    for (let j = 1; j < allCookieRows.length; j++) {
       total += parseInt(allCookieRows[j].getElementsByTagName('td')[i].innerText);
     }
     totalsArray.push(total);
