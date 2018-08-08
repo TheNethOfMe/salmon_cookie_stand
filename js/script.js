@@ -4,8 +4,11 @@
 const salesTable = document.getElementById('sales-table');
 const tableBody = document.createElement('tbody');
 
+const tosserTable = document.getElementById('tosser-table');
+const tosserBody = document.createElement('tbody');
+
 // function to produce an array of everything that will go into the header row of table
-function generateHourMarkers() {
+function generateHourMarkers(needsTotal) {
   let hourMarkers = [''];
   for (let i = 6; i < 21; i++) {
     if (i < 12) {
@@ -16,7 +19,7 @@ function generateHourMarkers() {
       hourMarkers.push('12pm');
     }
   }
-  hourMarkers.push('Store Totals');
+  if (needsTotal) hourMarkers.push('Store Totals');
   return hourMarkers;
 }
 
@@ -35,9 +38,9 @@ function generateTotalsArray() {
 }
 
 // function to create the table header or footer and append table body once the header is created
-function createTableHeaderFooter(tag, data) {
+function createTableHeaderFooter(tag, data, parent, body) {
   const tableHead = document.createElement(tag);
-  salesTable.appendChild(tableHead);
+  parent.appendChild(tableHead);
   const tableRow = document.createElement('tr');
   data.forEach((item) => {
     const tableHeading = document.createElement('th');
@@ -45,7 +48,7 @@ function createTableHeaderFooter(tag, data) {
     tableRow.appendChild(tableHeading);
   });
   tableHead.appendChild(tableRow);
-  salesTable.appendChild(tableBody);
+  parent.appendChild(body);
 }
 
 // this is the function that creates an array which contains what will be an entire row of table data
@@ -70,15 +73,24 @@ function generateRow() {
 // of the table
 function displayRow() {
   const dataArr = this.getStatsPerHour();
+  const tosserArr = dataArr.slice(0, 16);
   const newRow = document.createElement('tr');
+  const tossRow = document.createElement('tr');
   tableBody.appendChild(newRow);
-
+  tosserBody.appendChild(tossRow);
   dataArr.forEach((item) => {
     const cookieData = document.createTextNode(item);
     const newCell = document.createElement('td');
-
     newCell.appendChild(cookieData);
     newRow.appendChild(newCell);
+  });
+  tosserArr.forEach((item) => {
+    const tossers = parseInt(Math.ceil(item / 20));
+    const textData = isNaN(tossers) ? item : tossers;
+    const tosserData = document.createTextNode(textData);
+    const tossCell = document.createElement('td');
+    tossCell.appendChild(tosserData);
+    tossRow.appendChild(tossCell);
   });
 };
 
@@ -104,10 +116,12 @@ const capHillLocation = new Location(20, 38, 2.3, 'Capitol Hill');
 const alkiLocation = new Location(2, 16, 4.6, 'Alki');
 
 // save the header row values array to variable
-const headerHours = generateHourMarkers();
+const headerHours = generateHourMarkers(true);
+const tosserHours = generateHourMarkers(false);
 
 // call table header creation function
-createTableHeaderFooter('thead', headerHours);
+createTableHeaderFooter('thead', headerHours, salesTable, tableBody);
+createTableHeaderFooter('thead', tosserHours, tosserTable, tosserBody);
 
 // call the method on each object that creates the table and append it to the DOM
 pikeLocation.render();
@@ -120,4 +134,4 @@ alkiLocation.render();
 const footerTotals = generateTotalsArray();
 
 // call table footer creation function
-createTableHeaderFooter('tfoot', footerTotals);
+createTableHeaderFooter('tfoot', footerTotals, salesTable, tableBody);
