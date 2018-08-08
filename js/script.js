@@ -1,12 +1,5 @@
 'use strict';
 
-// grab the sales table and save it to a variable and create the tbody element to be added once the header is created
-const salesTable = document.getElementById('sales-table');
-const tableBody = document.createElement('tbody');
-
-const tosserTable = document.getElementById('tosser-table');
-const tosserBody = document.createElement('tbody');
-
 // function to produce an array of everything that will go into the header row of table
 function generateHourMarkers(needsTotal) {
   let hourMarkers = [''];
@@ -24,10 +17,11 @@ function generateHourMarkers(needsTotal) {
 }
 
 // function to produce an array of everything that will go into the footer row
-function generateTotalsArray() {
-  const allCookieRows = salesTable.getElementsByTagName('tr');
+function generateTotalsArray(table) {
+  const allCookieRows = table.getElementsByTagName('tr');
+  const allCookieCols = allCookieRows[1].getElementsByTagName('td');
   const totalsArray = ['Hour Totals'];
-  for (let i = 1; i < 17; i++) {
+  for (let i = 1; i < allCookieCols.length; i++) {
     let total = 0;
     for (let j = 1 ; j < allCookieRows.length; j++) {
       total += parseInt(allCookieRows[j].getElementsByTagName('td')[i].innerText);
@@ -66,18 +60,14 @@ function generateRow() {
   return rowArray;
 };
 
-// this is the function that actually creates the table and appends it to the DOM
-// the function calls the stat generator function and uses the data from the resulting array
-// and turns it into an HTML friendly table
-// it also keeps a running total of all customers and cookies to append totals to the end
-// of the table
-function displayRow() {
+// the function that actually creates the table out of the data
+function displayRow(sales, tossers) {
   const dataArr = this.getStatsPerHour();
   const tosserArr = dataArr.slice(0, 16);
   const newRow = document.createElement('tr');
   const tossRow = document.createElement('tr');
-  tableBody.appendChild(newRow);
-  tosserBody.appendChild(tossRow);
+  sales.appendChild(newRow);
+  tossers.appendChild(tossRow);
   dataArr.forEach((item) => {
     const cookieData = document.createTextNode(item);
     const newCell = document.createElement('td');
@@ -102,36 +92,60 @@ function Location(customerMin, customerMax, avgCookieSale, locationName) {
   this.locationName = locationName;
 }
 
-// the methods for generating stats and generating tables for the Location object
+// the methods for generating stats and generating tables for the Location object added to constructor with prototype
 Location.prototype.getStatsPerHour = generateRow;
 Location.prototype.render = displayRow;
 
-// one object for each location
-// each object contains the min and max hourly customers, average cookies sales, and a tableId
-// which is used in the generate table function so the function knows which id to append the table to
+// create our locations with constructors
 const pikeLocation = new Location(23, 65, 6.3, '1st & Pike');
 const seatacLocation = new Location(3, 24, 1.2, 'Seatac');
 const seaCenterLocation = new Location(11, 38, 3.7, 'Seattle Center');
 const capHillLocation = new Location(20, 38, 2.3, 'Capitol Hill');
 const alkiLocation = new Location(2, 16, 4.6, 'Alki');
 
-// save the header row values array to variable
-const headerHours = generateHourMarkers(true);
-const tosserHours = generateHourMarkers(false);
+// where all the magic happens
+function generateAllTables() {
+  // grab the ids for the sales table and tosser table and save them into variables
+  const salesTable = document.getElementById('sales-table');
+  const tosserTable = document.getElementById('tosser-table');
 
-// call table header creation function
-createTableHeaderFooter('thead', headerHours, salesTable, tableBody);
-createTableHeaderFooter('thead', tosserHours, tosserTable, tosserBody);
+  // we'll remove all of the elements within both of those in case the tables were already there and we want to create
+  // new one's with new data
+  while (salesTable.firstChild) {
+    salesTable.removeChild(salesTable.firstChild);
+  }
 
-// call the method on each object that creates the table and append it to the DOM
-// pikeLocation.render();
-seatacLocation.render();
-seaCenterLocation.render();
-capHillLocation.render();
-alkiLocation.render();
+  while (tosserTable.firstChild) {
+    tosserTable.removeChild(tosserTable.firstChild);
+  }
 
-// save the footer row values array to variable
-const footerTotals = generateTotalsArray();
+  // with clean id tags, we create the tag body elements for both tables that will contain that table's data and
+  // be appended later
+  const tableBody = document.createElement('tbody');
+  const tosserBody = document.createElement('tbody');
 
-// call table footer creation function
-createTableHeaderFooter('tfoot', footerTotals, salesTable, tableBody);
+  // save the header row values array to variables for both tables, arguments indicate headers are for sales table
+  const headerHours = generateHourMarkers(true);
+  const tosserHours = generateHourMarkers(false);
+
+  // call table header creation function for both tables with proper arguments
+  createTableHeaderFooter('thead', headerHours, salesTable, tableBody);
+  createTableHeaderFooter('thead', tosserHours, tosserTable, tosserBody);
+
+  // call the method on each object that creates the table and append it to the DOM
+  pikeLocation.render(salesTable, tosserTable);
+  seatacLocation.render(salesTable, tosserTable);
+  seaCenterLocation.render(salesTable, tosserTable);
+  capHillLocation.render(salesTable, tosserTable);
+  alkiLocation.render(salesTable, tosserTable);
+
+  // save the footer row values array to variables for both tables
+  const footerTotals = generateTotalsArray(salesTable);
+  const tosserTotals = generateTotalsArray(tosserTable);
+
+  // call table footer creation function for both tables
+  createTableHeaderFooter('tfoot', footerTotals, salesTable, tableBody);
+  createTableHeaderFooter('tfoot', tosserTotals, tosserTable, tosserBody);
+}
+
+generateAllTables();
