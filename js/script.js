@@ -25,12 +25,12 @@ function generateHourMarkers(needsTotal) {
 
 // function to produce an array of everything that will go into the footer row
 function generateTotalsArray() {
-  const allRows = document.getElementsByTagName('tr');
+  const allCookieRows = salesTable.getElementsByTagName('tr');
   const totalsArray = ['Hour Totals'];
   for (let i = 1; i < 17; i++) {
     let total = 0;
-    for (let j = 1 ; j < 6; j++) {
-      total += parseInt(allRows[j].getElementsByTagName('td')[i].innerText);
+    for (let j = 1 ; j < allCookieRows.length; j++) {
+      total += parseInt(allCookieRows[j].getElementsByTagName('td')[i].innerText);
     }
     totalsArray.push(total);
   }
@@ -124,7 +124,7 @@ createTableHeaderFooter('thead', headerHours, salesTable, tableBody);
 createTableHeaderFooter('thead', tosserHours, tosserTable, tosserBody);
 
 // call the method on each object that creates the table and append it to the DOM
-pikeLocation.render();
+// pikeLocation.render();
 seatacLocation.render();
 seaCenterLocation.render();
 capHillLocation.render();
