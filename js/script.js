@@ -34,7 +34,7 @@ function generateCookieRow() {
   }
   rowArray.push(cookieTotal);
   return rowArray;
-};
+}
 
 function generateFooterData(table) {
   const allCookieRows = table.getElementsByTagName('tr');
@@ -85,7 +85,7 @@ function displayCookieRow(sales, tossers) {
     tossCell.appendChild(tosserData);
     tossRow.appendChild(tossCell);
   });
-};
+}
 
 function displayFooter(data, parent) {
   const tableFoot = document.createElement('tfoot');
@@ -99,11 +99,11 @@ function displayFooter(data, parent) {
   tableFoot.appendChild(tableRow);
 }
 
-// an array for containing all Location objects
+// an array for containing all StoreLocation objects
 let storeLocationArray = [];
 
 // location object constructor which also pushes the object into the storeLocationArray
-function Location(customerMin, customerMax, avgCookieSale, locationName) {
+function StoreLocation(customerMin, customerMax, avgCookieSale, locationName) {
   this.customerMin = customerMin;
   this.customerMax = customerMax;
   this.avgCookieSale = avgCookieSale;
@@ -121,15 +121,15 @@ function createAllFooters() {
 }
 
 // the methods for generating stats and generating tables for the Location object added to constructor with prototype
-Location.prototype.getCookieRow = generateCookieRow;
-Location.prototype.render = displayCookieRow;
+StoreLocation.prototype.getCookieRow = generateCookieRow;
+StoreLocation.prototype.render = displayCookieRow;
 
-// create all locations
-new Location(23, 65, 6.3, '1st & Pike');
-new Location(3, 24, 1.2, 'Seatac');
-new Location(11, 38, 3.7, 'Seattle Center');
-new Location(20, 38, 2.3, 'Capitol Hill');
-new Location(2, 16, 4.6, 'Alki');
+// create all StoreLocations
+new StoreLocation(23, 65, 6.3, '1st & Pike');
+new StoreLocation(3, 24, 1.2, 'Seatac');
+new StoreLocation(11, 38, 3.7, 'Seattle Center');
+new StoreLocation(20, 38, 2.3, 'Capitol Hill');
+new StoreLocation(2, 16, 4.6, 'Alki');
 
 // generate all tables on page load
 const headerHours = generateHeaderData(true);
@@ -184,7 +184,7 @@ function addNewLocation(e) {
       errListItem.innerText = err;
     });
   } else {
-    const newLocation = new Location(formResults.minCustomers, formResults.maxCustomers, formResults.avgCookies, formResults.locationName);
+    const newLocation = new StoreLocation(formResults.minCustomers, formResults.maxCustomers, formResults.avgCookies, formResults.locationName);
     newLocation.render(tableBody, tosserBody);
     createAllFooters();
     propertiesArr.forEach((prop) => {
