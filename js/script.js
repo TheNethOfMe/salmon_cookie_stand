@@ -1,5 +1,13 @@
 'use strict';
 
+// grab the ids for the sales table and tosser table and save them into variables
+const salesTable = document.getElementById('sales-table');
+const tosserTable = document.getElementById('tosser-table');
+
+// we create the tag body elements for both tables that will contain that table's data and be appended later
+const tableBody = document.createElement('tbody');
+const tosserBody = document.createElement('tbody');
+
 // function to produce an array of everything that will go into the header row of table
 function generateHourMarkers(needsTotal) {
   let hourMarkers = [''];
@@ -32,8 +40,8 @@ function generateTotalsArray(table) {
 }
 
 // function to create the table header or footer and append table body once the header is created
-function createTableHeaderFooter(tag, data, parent, body) {
-  const tableHead = document.createElement(tag);
+function createTableHeader(data, parent, body) {
+  const tableHead = document.createElement('thead');
   parent.appendChild(tableHead);
   const tableRow = document.createElement('tr');
   data.forEach((item) => {
@@ -43,6 +51,18 @@ function createTableHeaderFooter(tag, data, parent, body) {
   });
   tableHead.appendChild(tableRow);
   parent.appendChild(body);
+}
+
+function createTableFooter(data, parent) {
+  const tableFoot = document.createElement('tfoot');
+  parent.appendChild(tableFoot);
+  const tableRow = document.createElement('tr');
+  data.forEach((item) => {
+    const tableData = document.createElement('th');
+    tableData.appendChild(document.createTextNode(item));
+    tableRow.appendChild(tableData);
+  });
+  tableFoot.appendChild(tableRow);
 }
 
 // this is the function that creates an array which contains what will be an entire row of table data
@@ -96,6 +116,16 @@ function Location(customerMin, customerMax, avgCookieSale, locationName) {
   storeLocationArray.push(this);
 }
 
+function generateFooter() {
+  // save the footer row values array to variables for both tables
+  const footerTotals = generateTotalsArray(salesTable);
+  const tosserTotals = generateTotalsArray(tosserTable);
+
+  // call table footer creation function for both tables
+  createTableFooter(footerTotals, salesTable);
+  createTableFooter(tosserTotals, tosserTable);
+}
+
 // the methods for generating stats and generating tables for the Location object added to constructor with prototype
 Location.prototype.getStatsPerHour = generateRow;
 Location.prototype.render = displayRow;
@@ -106,12 +136,8 @@ new Location(11, 38, 3.7, 'Seattle Center');
 new Location(20, 38, 2.3, 'Capitol Hill');
 new Location(2, 16, 4.6, 'Alki');
 
-// where all the magic happens
+// where most of the magic happens
 function generateAllTables() {
-  // grab the ids for the sales table and tosser table and save them into variables
-  const salesTable = document.getElementById('sales-table');
-  const tosserTable = document.getElementById('tosser-table');
-
   // we'll remove all of the elements within both of those in case the tables were already there and we want to create
   // new one's with new data
   while (salesTable.firstChild) {
@@ -122,31 +148,20 @@ function generateAllTables() {
     tosserTable.removeChild(tosserTable.firstChild);
   }
 
-  // with clean id tags, we create the tag body elements for both tables that will contain that table's data and
-  // be appended later
-  const tableBody = document.createElement('tbody');
-  const tosserBody = document.createElement('tbody');
-
   // save the header row values array to variables for both tables, arguments indicate headers are for sales table
   const headerHours = generateHourMarkers(true);
   const tosserHours = generateHourMarkers(false);
 
   // call table header creation function for both tables with proper arguments
-  createTableHeaderFooter('thead', headerHours, salesTable, tableBody);
-  createTableHeaderFooter('thead', tosserHours, tosserTable, tosserBody);
+  createTableHeader(headerHours, salesTable, tableBody);
+  createTableHeader(tosserHours, tosserTable, tosserBody);
 
   // call the method on each object that creates the table and append it to the DOM
   storeLocationArray.forEach((franchise) => {
-    franchise.render(salesTable, tosserTable);
+    franchise.render(tableBody, tosserBody);
   });
 
-  // save the footer row values array to variables for both tables
-  const footerTotals = generateTotalsArray(salesTable);
-  const tosserTotals = generateTotalsArray(tosserTable);
-
-  // call table footer creation function for both tables
-  createTableHeaderFooter('tfoot', footerTotals, salesTable, tableBody);
-  createTableHeaderFooter('tfoot', tosserTotals, tosserTable, tosserBody);
+  generateFooter();
 }
 
 // run the function to create the tables when page starts
@@ -161,6 +176,13 @@ function clearErrors() {
   while (errorList.firstChild) {
     errorList.removeChild(errorList.firstChild);
   }
+}
+
+// remove the footer from both tables before recalculating new hourly totals
+function clearFooters() {
+  const footers = document.getElementsByTagName('tfoot');
+  tosserTable.removeChild(footers[1]);
+  salesTable.removeChild(footers[0]);
 }
 
 // handle errors from the user submitted form
@@ -197,8 +219,10 @@ function addNewLocation(e) {
     });
   } else {
     clearErrors();
-    new Location(formResults.newMinCustomers, formResults.newMaxCustomers, formResults.newAvgCookies, formResults.newLocationName);
-    generateAllTables();
+    const newLocation = new Location(formResults.newMinCustomers, formResults.newMaxCustomers, formResults.newAvgCookies, formResults.newLocationName);
+    clearFooters();
+    newLocation.render(tableBody, tosserBody);
+    generateFooter();
     e.target.locationName.value = '';
     e.target.minCustomers.value = '';
     e.target.maxCustomers.value = '';
