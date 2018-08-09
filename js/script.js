@@ -71,7 +71,7 @@ function generateRow() { // generateCookieRow
   let cookieTotal = 0;
   rowArray.push(this.locationName);
   for (let i = 0; i < 15; i++) {
-    const customers = Math.floor(Math.random() * (this.customerMax - this.customerMin) + this.customerMin);
+    const customers = Math.floor(Math.random() * (this.customerMax - this.customerMin + 1) + this.customerMin);
     const cookies = Math.floor(customers * this.avgCookieSale);
     cookieTotal += cookies;
     rowArray.push(cookies);
