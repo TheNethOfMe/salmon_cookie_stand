@@ -9,7 +9,7 @@ const tableBody = document.createElement('tbody');
 const tosserBody = document.createElement('tbody');
 
 // function to produce an array of everything that will go into the header row of table
-function generateHourMarkers(needsTotal) {
+function generateHourMarkers(needsTotal) { //generateHeaderData
   let hourMarkers = [''];
   for (let i = 6; i < 21; i++) {
     if (i < 12) {
@@ -25,7 +25,7 @@ function generateHourMarkers(needsTotal) {
 }
 
 // function to produce an array of everything that will go into the footer row
-function generateTotalsArray(table) {
+function generateTotalsArray(table) { // generateFooterData
   const allCookieRows = table.getElementsByTagName('tr');
   const allCookieCols = allCookieRows[1].getElementsByTagName('td');
   const totalsArray = ['Hour Totals'];
@@ -39,8 +39,8 @@ function generateTotalsArray(table) {
   return totalsArray;
 }
 
-// function to create the table header or footer and append table body once the header is created
-function createTableHeader(data, parent, body) {
+// functions to create the table headers and footers and append table body once the header is created
+function createTableHeader(data, parent, body) { // displayHeader
   const tableHead = document.createElement('thead');
   parent.appendChild(tableHead);
   const tableRow = document.createElement('tr');
@@ -53,7 +53,7 @@ function createTableHeader(data, parent, body) {
   parent.appendChild(body);
 }
 
-function createTableFooter(data, parent) {
+function createTableFooter(data, parent) { // displayFooter
   const tableFoot = document.createElement('tfoot');
   parent.appendChild(tableFoot);
   const tableRow = document.createElement('tr');
@@ -66,7 +66,7 @@ function createTableFooter(data, parent) {
 }
 
 // this is the function that creates an array which contains what will be an entire row of table data
-function generateRow() {
+function generateRow() { // generateCookieRow
   let rowArray = [];
   let cookieTotal = 0;
   rowArray.push(this.locationName);
@@ -81,7 +81,7 @@ function generateRow() {
 };
 
 // the function that actually creates the table out of the data
-function displayRow(sales, tossers) {
+function displayRow(sales, tossers) { // displayCookieRow
   const dataArr = this.getStatsPerHour();
   const tosserArr = dataArr.slice(0, 16);
   const newRow = document.createElement('tr');
@@ -116,7 +116,7 @@ function Location(customerMin, customerMax, avgCookieSale, locationName) {
   storeLocationArray.push(this);
 }
 
-function generateFooter() {
+function generateFooter() { // Do we need this?
   // save the footer row values array to variables for both tables
   const footerTotals = generateTotalsArray(salesTable);
   const tosserTotals = generateTotalsArray(tosserTable);
