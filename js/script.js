@@ -138,16 +138,6 @@ new Location(2, 16, 4.6, 'Alki');
 
 // where most of the magic happens
 function generateAllTables() {
-  // we'll remove all of the elements within both of those in case the tables were already there and we want to create
-  // new one's with new data
-  while (salesTable.firstChild) {
-    salesTable.removeChild(salesTable.firstChild);
-  }
-
-  while (tosserTable.firstChild) {
-    tosserTable.removeChild(tosserTable.firstChild);
-  }
-
   // save the header row values array to variables for both tables, arguments indicate headers are for sales table
   const headerHours = generateHourMarkers(true);
   const tosserHours = generateHourMarkers(false);
