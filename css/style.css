@@ -35,6 +35,10 @@ a:hover {
   /* margin-bottom: -50px; */
 }
 
+.hidden {
+  display: none;
+}
+
 /* HEAD */
 #logo-head {
   background-color: var(--salmon);

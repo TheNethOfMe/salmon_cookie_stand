@@ -142,8 +142,42 @@ storeLocationArray.forEach((franchise) => {
 createAllFooters();
 
 // functions and variables related to the new location form follow
-const newLocationForm = document.getElementById('new-location-form');
+const locationForm = document.getElementById('location-form');
 const errorList = document.getElementById('error-list');
+const toggleFormButton = document.getElementById('toggle-form-button');
+const editOnlyField = document.getElementById('edit-only-field');
+const newOnlyField = document.getElementById('new-only-field');
+const locationPicker = document.getElementById('pickLocation');
+// keeps track of form when toggling between new and edit mode
+let editFormMode = false;
+
+// toggles form between edit mode and new entry mode
+function onFormToggle(e) {
+  e.preventDefault();
+  toggleForm();
+}
+
+function toggleForm() {
+  editFormMode = !editFormMode;
+  const formHeader = document.getElementById('form-header');
+  const submitButton = document.getElementById('submit-button');
+  if (editFormMode) {
+    toggleFormButton.innerText = 'Add A New Location';
+    formHeader.innerText = 'Edit An Existing Location';
+    submitButton.innerText = 'Edit Location';
+    editOnlyField.classList.remove('hidden');
+    newOnlyField.classList.add('hidden');
+    populateSelect();
+  } else {
+    toggleFormButton.innerText = 'Edit An Existing Location';
+    formHeader.innerText = 'Add A New Location';
+    submitButton.innerText = 'Add Location';
+    editOnlyField.classList.add('hidden');
+    newOnlyField.classList.remove('hidden');
+  }
+}
+
+toggleFormButton.addEventListener('click', onFormToggle);
 
 // clears all errors before displaying new errors or upon successful submit
 function clearErrors() {
@@ -167,16 +201,69 @@ function errorHandling(data) {
   return errors;
 }
 
-// when the form is submitted
-function addNewLocation(e) {
+// populate form fields
+function populateForm(customerMin, customerMax, avgCookieSale, locationName) {
+  document.getElementById('locationName').value = locationName;
+  document.getElementById('minCustomers').value = customerMin;
+  document.getElementById('maxCustomers').value = customerMax;
+  document.getElementById('avgCookies').value = avgCookieSale;
+}
+
+// get a storeLocation from the array when a store is selected in the edit form
+function fetchStoreData() {
+  const storeData = storeLocationArray.find((store) => {
+    return store.locationName === this.value;
+  });
+  populateForm(storeData.customerMin, storeData.customerMax, storeData.avgCookieSale, null);
+}
+
+// create list of options for select form based on location names
+function populateSelect() {
+  while(locationPicker.firstChild) {
+    locationPicker.removeChild(locationPicker.firstChild);
+  }
+  locationPicker.appendChild(document.createElement('option'));
+  storeLocationArray.forEach((store) => {
+    const option = document.createElement('option');
+    option.setAttribute('value', store.locationName);
+    const optionText = document.createTextNode(store.locationName);
+    option.appendChild(optionText);
+    locationPicker.appendChild(option);
+  });
+}
+
+locationPicker.addEventListener('change', fetchStoreData);
+
+// finds a row of data based on location name and removes it from the DOM
+function removeLocation(name) {
+  let removeMe;
+  storeLocationArray.find((store, id) => {
+    if (store.locationName === name) {
+      removeMe = id;
+    }
+  });
+  storeLocationArray.splice(removeMe, 1);
+  [salesTable, tosserTable].forEach((table) => {
+    const bodyRows = table.children[1].children;
+    for (let i = 0; i < bodyRows.length; i++) {
+      const currentRow = bodyRows[i];
+      if (currentRow.children[0].innerText === name) {
+        currentRow.remove();
+      }
+    }
+  });
+}
+
+// when the form is submitted add the new location
+function onSubmitForm(e) {
   e.preventDefault();
   let formResults = {};
-  const propertiesArr = ['locationName', 'minCustomers', 'maxCustomers', 'avgCookies'];
-  propertiesArr.forEach((prop) => {
+  formResults.locationName = editFormMode ? e.target.pickLocation.value : e.target.locationName.value;
+  ['minCustomers', 'maxCustomers', 'avgCookies'].forEach((prop) => {
     formResults[prop] = parseFloat(e.target[prop].value) || e.target[prop].value;
   });
-  const errorsArray = errorHandling(formResults);
   clearErrors();
+  const errorsArray = errorHandling(formResults);
   if (errorsArray.length) {
     errorsArray.forEach((err) => {
       const errListItem = document.createElement('li');
@@ -184,13 +271,22 @@ function addNewLocation(e) {
       errListItem.innerText = err;
     });
   } else {
+    if (editFormMode) {
+      removeLocation(formResults.locationName);
+      toggleForm();
+    }
     const newLocation = new StoreLocation(formResults.minCustomers, formResults.maxCustomers, formResults.avgCookies, formResults.locationName);
     newLocation.render(tableBody, tosserBody);
     createAllFooters();
-    propertiesArr.forEach((prop) => {
-      e.target[prop].value = '';
-    });
+    populateForm('', '', '', '');
   }
 }
 
-newLocationForm.addEventListener('submit', addNewLocation);
+locationForm.addEventListener('submit', onSubmitForm);
+
+
+
+
+
+
+
