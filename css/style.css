@@ -2,13 +2,21 @@
 /* Dark Blue #16181C */
 /* Light Blue #959089 */
 /* Gold-ish #D9B669 */
+:root {
+  --salmon: rgb(224, 127, 92);
+  --darkColor: #16181C;
+  --liteColor: #959089;
+  --goldish: #D9B669;
+}
+
 html {
+  background-color: var(--darkColor);
   height: 100%;
   margin: 0;
 }
 
 body {
-  background-color: #16181C;
+  color: var(--darkColor);
   height: 100%;
   margin: 0;
 }
@@ -19,7 +27,7 @@ a {
 }
 
 a:hover {
-  color: #D9B669;
+  color: var(--goldish);
 }
 
 .wrapper {
@@ -27,10 +35,14 @@ a:hover {
   /* margin-bottom: -50px; */
 }
 
+.hidden {
+  display: none;
+}
+
 /* HEAD */
 #logo-head {
-  background-color: #B75835;
-  border-bottom: #959089 solid 5px;
+  background-color: var(--salmon);
+  border-bottom: var(--liteColor) solid 5px;
   padding: 1.3em;
   text-align: center;
 }
@@ -82,7 +94,7 @@ h3 {
 }
 
 table {
-  border: solid #B75835 3px; 
+  border: solid var(--salmon) 3px; 
 }
 
 h4 {
@@ -100,7 +112,7 @@ th {
 }
 
 tr:hover {
-  background-color: #D9B669 !important;
+  background-color: var(--goldish) !important;
 }
 
 tr:nth-child(even) {
@@ -113,7 +125,7 @@ tr:nth-child(odd) {
 
 /* MAIN PAGE */
 section {
-  background-color: #959089;
+  background-color: var(--liteColor);
   font-size: 1.2em;
   margin: 10px auto;
   padding: 8px;
@@ -128,23 +140,29 @@ section div {
 }
 
 .big-side {
-  background-color: #eee;
   display: inline-block;
   min-height: 100px;
   width: 55%
 }
 
 .small-side {
-  background-color: #AA6745;
   display: inline-block;
   min-height: 100px;
   width: 30%;
 }
 
+.text-side {
+  background-color: var(--salmon);
+}
+
+.img-side {
+  background-color: #eee;
+}
+
 /* FORM */
 form {
-  background-color: #959089;
-  border: #B75835 solid 3px;
+  background-color: var(--liteColor);
+  border: var(--salmon) solid 3px;
   margin: 9px auto;
   padding: 8px;
   width: 80%;
@@ -163,8 +181,12 @@ form {
 
 /* FOOTER */
 footer {
-  background-color: #B75835;
-  border-top: #959089 solid 5px;
+  background-color: var(--salmon);
+  border-top: var(--liteColor) solid 5px;
   margin-top: 15px;
   height: 50px;
+}
+
+#chinook-pic {
+  max-width: 150px;
 }
